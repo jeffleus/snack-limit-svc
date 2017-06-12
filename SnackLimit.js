@@ -25,6 +25,21 @@ var SnackLimit = sequelize.define('snacklimit', {
 	tableName: 'SnackLimits'
 });
 
+var Athlete = sequelize.define('athlete', {
+  AthleteID: { 
+	  type: Sequelize.INTEGER, 
+	  primaryKey: true, 
+	  autoincrement: true, 
+	  field: 'StudentSportID' 
+  }, 
+  firstName: { type: Sequelize.STRING, field: 'firstname' }, 
+  lastName: { type: Sequelize.STRING, field: 'lastname' }, 
+  schoolid: { type: Sequelize.STRING, field: 'schoolsidnumber' },
+  sportCode: { type: Sequelize.STRING, field: 'SportCodeID' }
+}, {
+	tableName: 'StudentSport'
+});
+
 var moduleName = "SNACKLIMIT:";
 
 var Sport = sequelize.define('sport', {
@@ -47,20 +62,53 @@ SnackLimit.belongsTo(Sport, {as: 'Sport', foreignKey: 'SportCodeID'});
 
 module.exports.get = function(id,filter) {
     if (!id) return list(filter);
-    console.log(moduleName, 'calling getSingle with id: ' + id);
+//    console.log(moduleName, 'calling getSingle with id: ' + id);
+//    var options = {
+//        where: { SnackLimitID: id },
+//        include: [ {model: Sport, as: 'Sport'} ]
+//    };
+//    return sequelize.sync().then(function() {
+//        return SnackLimit.findOne(options).then(function(snacklimit) {
+//            console.info(moduleName, 'snacklimit record found');
+//            return {
+//                count: (snacklimit)?1:0,
+//                snacklimits: [ (snacklimit)?snacklimit.get({plain:true}):null ]
+//            };
+//        })
+//    });
+	return teamLimit(id);
+}
+
+function teamLimit(id) {
+    console.log(moduleName, 'calling team lookup by sportCode');
+	//first set the schoolid of the student to find
     var options = {
-        where: { SnackLimitID: id },
-        include: [ {model: Sport, as: 'Sport'} ]
+        where: { schoolid: id }
     };
+	//then, run first query to get the athlete record
     return sequelize.sync().then(function() {
-        return SnackLimit.findOne(options).then(function(snacklimit) {
-            console.info(moduleName, 'snacklimit record found');
-            return {
-                count: (snacklimit)?1:0,
-                snacklimits: [ (snacklimit)?snacklimit.get({plain:true}):null ]
+        return Athlete.findOne(options).then(function(athlete) {
+			//chk to makes sure an athlete was found before proceeding
+			if (!athlete) {
+				throw new Error('Athlete record was not found for: ' + id);
+			}
+			//use the sportCode of the athlete to start a new query
+            var filterOption = {
+                where: {
+                    SportCodeID: athlete.sportCode 
+                },
+                include: [ {model: Sport, as: 'Sport'} ]
             };
-        })
-    });
+			//now, run the second query against the limits for the athlete's sport
+			return SnackLimit.findOne(filterOption).then(function(snacklimit) {
+				console.info(moduleName, 'snacklimit record found');
+				return {
+					count: (snacklimit)?1:0,
+					snacklimits: [ (snacklimit)?snacklimit.get({plain:true}):null ]
+				};
+			});
+		});
+	});
 }
 
 function list(filter) {

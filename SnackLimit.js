@@ -19,6 +19,9 @@ var SnackLimit = sequelize.define('snacklimit', {
 	  field: 'SnackLimitID' 
   }, 
 //  SportCode: { type: Sequelize.INTEGER, field: 'SportCodeId' },
+  dayUniqueLimit: { type: Sequelize.INTEGER, INTEGER: 'DayUniqueLimit' }, 
+  dayPreLimit: { type: Sequelize.INTEGER, INTEGER: 'DayPreLimit' }, 
+  dayPostLimit: { type: Sequelize.INTEGER, INTEGER: 'DayPostLimit' }, 
   daySnackLimit: { type: Sequelize.INTEGER, INTEGER: 'DaySnackLimit' }, 
   monthSnackLimit: { type: Sequelize.INTEGER, field: 'MonthSnackLimit' }
 }, {

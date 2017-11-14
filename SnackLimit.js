@@ -1,7 +1,7 @@
 'use strict';
 var Sequelize = require('sequelize');
 var Config = require('./Config')();
-var sequelize = new Sequelize('FuelStation_STAN', Config.username, Config.password, {
+var sequelize = new Sequelize('FS_VATECH', Config.username, Config.password, {
 	host: 'callsheet-mysql.cn6x6nhayn9c.us-west-2.rds.amazonaws.com',
 	port: 3306,
     pool: {
@@ -19,11 +19,12 @@ var SnackLimit = sequelize.define('snacklimit', {
 	  field: 'SnackLimitID' 
   }, 
 //  SportCode: { type: Sequelize.INTEGER, field: 'SportCodeId' },
-  dayUniqueLimit: { type: Sequelize.INTEGER, INTEGER: 'DayUniqueLimit' }, 
-  dayPreLimit: { type: Sequelize.INTEGER, INTEGER: 'DayPreLimit' }, 
-  dayPostLimit: { type: Sequelize.INTEGER, INTEGER: 'DayPostLimit' }, 
-  dayStaffLimit: { type: Sequelize.INTEGER, INTEGER: 'DayStaffLimit' }, 
-  daySnackLimit: { type: Sequelize.INTEGER, INTEGER: 'DaySnackLimit' }, 
+  dayUniqueLimit: { type: Sequelize.INTEGER, field: 'DayUniqueLimit' }, 
+  dayPreLimit: { type: Sequelize.INTEGER, field: 'DayPreLimit' }, 
+  dayPostLimit: { type: Sequelize.INTEGER, field: 'DayPostLimit' }, 
+  dayStaffLimit: { type: Sequelize.INTEGER, field: 'DayStaffLimit' }, 
+  daySnackLimit: { type: Sequelize.INTEGER, field: 'DaySnackLimit' }, 
+  dayTotalLimit: { type: Sequelize.INTEGER, field: 'DayTotalLimit' }, 
   monthSnackLimit: { type: Sequelize.INTEGER, field: 'MonthSnackLimit' }
 }, {
 	tableName: 'SnackLimits'

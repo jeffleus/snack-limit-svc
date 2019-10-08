@@ -26,7 +26,7 @@ console.log("FILTER: ", filter);
 //Checkout.get(id).then(function(result) {
     
 //Checkout.report().then(function(result) {
-SnackLimit.get('999999999').then(function(result) {
+SnackLimit.get('00000000').then(function(result) {
 	
     console.log(result);
 	return;

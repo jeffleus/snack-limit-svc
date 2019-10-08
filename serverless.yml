@@ -20,7 +20,7 @@ service: tt-snack-limit-svc
 provider:
   name: aws
   role: arn:aws:iam::236711959566:role/lambda_callsheet
-  runtime: nodejs6.10
+  runtime: nodejs8.10
 
 # you can overwrite defaults here
   stage: demo
